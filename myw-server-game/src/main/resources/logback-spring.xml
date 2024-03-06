@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+
+<configuration scan="true" scanPeriod="60 seconds">
+	<springProperty name="ACTIVE_PROFILE" source="spring.profiles.active" />
+
+	<springProfile name="local">
+		<property resource="logback-local.properties" />
+	</springProfile>
+
+	<property name="LOG_FILE" value="${fileAppender.logFile}" />
+	<property name="ERROR_LOG_FILE" value="${errorFileAppender.logFile}" />
+
+	<property name="LOG_PATTERN" value="%d{yy-MM-dd HH:mm:ss.SSS} %-5level [%thread] [%logger{0}:%line] [%X{servletPath}] %msg%n" />
+	<property name="CONSOLE_LOG_PATTERN" value="${LOG_PATTERN}" />
+	<property name="FILE_LOG_PATTERN" value="${LOG_PATTERN}" />
+
+	<property name="LOGBACK_ROLLINGPOLICY_MAX_FILE_SIZE" value="${fileAppender.maxFileSize}"/>
+	<property name="LOGBACK_ROLLINGPOLICY_TOTAL_SIZE_CAP" value="${fileAppender.totalSizeCap}"/>
+	<property name="LOGBACK_ROLLINGPOLICY_MAX_HISTORY" value="${fileAppender.maxHistory}"/>
+
+	<include resource="org/springframework/boot/logging/logback/defaults.xml" />
+	<include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+	<include resource="org/springframework/boot/logging/logback/file-appender.xml" />
+
+	<appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>ERROR</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<encoder>
+			<pattern>${FILE_LOG_PATTERN}</pattern>
+			<charset>${FILE_LOG_CHARSET}</charset>
+		</encoder>
+		<file>${ERROR_LOG_FILE}</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${LOGBACK_ROLLINGPOLICY_FILE_NAME_PATTERN:-${ERROR_LOG_FILE}.%d{yyyy-MM-dd}.%i.gz}</fileNamePattern>
+			<cleanHistoryOnStart>${errorFileAppender.clearHistoryOnStart:-false}</cleanHistoryOnStart>
+			<maxFileSize>${errorFileAppender.maxFileSize:-10MB}</maxFileSize>
+			<totalSizeCap>${errorFileAppender.totalSizeCap:-0}</totalSizeCap>
+			<maxHistory>${errorFileAppender.maxHistory:-7}</maxHistory>
+		</rollingPolicy>
+	</appender>
+
+	<root level="${logging.level.root}">
+		<appender-ref ref="FILE" />
+		<appender-ref ref="ERROR_FILE" />
+	</root>
+
+	<logger name="com.kkd.myweb" level="${logging.level.game}" additivity="false">
+		<appender-ref ref="FILE" />
+		<appender-ref ref="ERROR_FILE" />
+	</logger>
+
+	<springProfile name="local">
+		<root level="${logging.level.root}" additivity="false">
+			<appender-ref ref="CONSOLE" />
+		</root>
+		<logger name="com.kkd.myweb" level="${logging.level.game}" additivity="false">
+			<appender-ref ref="CONSOLE" />
+		</logger>
+	</springProfile>
+</configuration>

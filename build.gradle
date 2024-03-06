@@ -1,0 +1,72 @@
+plugins {
+	id 'org.springframework.boot' version '3.2.3'
+	id 'io.spring.dependency-management' version '1.1.4'
+	id 'java'
+}
+
+allprojects {
+    group 'com.kkd.myweb'
+    version '1.0'
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    java {
+	    sourceCompatibility = '17'
+    }
+
+    dependencies {
+    	//lombok
+		compileOnly "org.projectlombok:lombok"
+		annotationProcessor "org.projectlombok:lombok"
+		
+		//apache commons lang
+		implementation 'org.apache.commons:commons-lang3'
+	}
+}
+
+configure([  project(":myw-domain-admin")
+			,project(":myw-domain-dynamodb")
+			,project(":myw-domain-redis")
+		  	,project(":myw-module-aws")
+		  	,project(":myw-server-game")
+		  ]) {
+
+    repositories {
+        mavenCentral()
+    }
+
+	dependencies {
+        implementation project(':myw-common')
+
+		//spring boot starter
+		implementation 'org.springframework.boot:spring-boot-starter'
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	}
+}
+
+project(':myw-domain-dynamodb') {
+    dependencies {
+        implementation project(':myw-domain-redis')
+    }
+}
+
+project(':myw-server-game') {
+    dependencies {
+        implementation project(':myw-domain-admin')
+        implementation project(':myw-domain-dynamodb')
+        implementation project(':myw-domain-redis')
+        implementation project(':myw-module-aws')
+    }
+}
+
+bootJar {
+    enabled = false
+}

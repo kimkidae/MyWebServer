@@ -1,0 +1,38 @@
+spring:
+  datasource:
+    prefix: myw_log
+    logs:
+      - name: myw_log1
+        hikari:
+          jdbc-url: jdbc:mysql://localhost:3306/myw_log1?serverTimezone=UTC&cacheDefaultTimezone=false
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          username: root
+          password: andyxtreedb
+          pool-name: HikariLog1Pool
+          maximum-pool-size: 2
+        slaves:
+          - name: myw_log1_read1
+            hikari:
+              jdbc-url: jdbc:mysql://localhost:3306/myw_log1?serverTimezone=UTC&cacheDefaultTimezone=false
+              driver-class-name: com.mysql.cj.jdbc.Driver
+              username: root
+              password: andyxtreedb
+              pool-name: HikariLog1Read1Pool
+              maximum-pool-size: 2
+      - name: myw_log2
+        hikari:
+          jdbc-url: jdbc:mysql://localhost:3306/myw_log2?serverTimezone=UTC&cacheDefaultTimezone=false
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          username: root
+          password: andyxtreedb
+          pool-name: HikariLog2Pool
+          maximum-pool-size: 2
+        slaves:
+          - name: myw_log2_read1
+            hikari:
+              jdbc-url: jdbc:mysql://localhost:3306/myw_log2?serverTimezone=UTC&cacheDefaultTimezone=false
+              driver-class-name: com.mysql.cj.jdbc.Driver
+              username: root
+              password: andyxtreedb
+              pool-name: HikariLog2Read1Pool
+              maximum-pool-size: 2

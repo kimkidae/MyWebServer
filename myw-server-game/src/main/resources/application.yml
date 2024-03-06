@@ -1,0 +1,46 @@
+spring:
+  profiles:
+    active: local
+  config:
+    import:
+    - classpath:application-domain-admin.yml
+    - classpath:application-domain-dynamodb.yml
+    - classpath:application-module-aws.yml
+    - classpath:application-domain-redis.yml
+
+server:
+  port: 8080
+
+spring-doc:
+  api-docs:
+    enabled: true
+    path: /api-docs/json
+    groups:
+      enabled: true
+  swagger-ui:
+    enabled: true
+    path: /api-docs
+    display-request-duration: true
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+
+application:
+  async:
+    log-thread-pool:
+      thread-name-prefix: "async-log-"
+      shutdown-await-termination: true
+      shutdown-await-termination-period: 60
+      core-size: 10
+      max-size: 10
+      queue-capacity: 1000
+  log-sharding-count: 2
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+      - local
+
+server:
+  port: 80

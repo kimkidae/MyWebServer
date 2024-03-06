@@ -1,0 +1,62 @@
+{"properties": [
+  {
+    "name": "spring.datasource.admin.hikari.jdbc-url",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.admin.hikari.jdbc-url'"
+  },
+  {
+    "name": "spring.datasource.admin.hikari.username",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.admin.hikari.username'"
+  },
+  {
+    "name": "spring.datasource.admin.hikari.password",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.admin.hikari.password'"
+  },
+  {
+    "name": "spring.datasource.admin.hikari.pool-name",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.admin.hikari.pool-name'"
+  },
+  {
+    "name": "spring.datasource.admin.hikari.maximum-pool-size",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.admin.hikari.maximum-pool-size'"
+  },
+  {
+    "name": "spring.jpa.admin.show-sql",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.jpa.admin.show-sql'"
+  },
+  {
+    "name": "spring.jpa.admin.hibernate.ddl-auto",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.jpa.admin.hibernate.ddl-auto'"
+  },
+  {
+    "name": "spring.jpa.admin.database",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.jpa.admin.database'"
+  },
+  {
+    "name": "spring.jpa.admin.hibernate.use-new-id-generator-mappings",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.jpa.admin.hibernate.use-new-id-generator-mappings'"
+  },
+  {
+    "name": "spring.jpa.admin.properties.hibernate.format_sql",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.jpa.admin.properties.hibernate.format_sql'"
+  },
+  {
+    "name": "spring.jpa.admin.properties.hibernate.enable_lazy_load_no_trans",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.jpa.admin.properties.hibernate.enable_lazy_load_no_trans'"
+  },
+  {
+    "name": "spring.jpa.admin.open-in-view",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.jpa.admin.open-in-view'"
+  }
+]}

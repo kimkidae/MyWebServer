@@ -1,0 +1,21 @@
+spring:
+  jpa:
+    admin:
+      database: mysql
+      hibernate:
+        ddl-auto: validate
+        use-new-id-generator-mappings: false
+      properties:
+        hibernate:
+          format_sql: true
+          enable_lazy_load_no_trans: true
+      open-in-view: false
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile:
+        - local
+    import: classpath:application-domain-admin-local.yml

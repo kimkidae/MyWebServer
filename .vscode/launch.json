@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-MYWGameServerApplication<myw-server-game>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.kkd.myweb.MYWGameServerApplication",
+            "projectName": "myw-server-game",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

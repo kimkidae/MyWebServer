@@ -1,0 +1,29 @@
+amazon:
+  dynamodb:
+    cache-ttl-minutes: 10
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - local
+
+amazon:
+  dynamodb:
+    table-name-prefix: myw-loc-
+    endpoint: http://localhost:8000
+    region: localhost
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - dev
+
+amazon:
+  dynamodb:
+    table-name-prefix: myw-dev-
+    region: ap-northeast-2
+    endpoint: https://dynamodb.ap-northeast-2.amazonaws.com

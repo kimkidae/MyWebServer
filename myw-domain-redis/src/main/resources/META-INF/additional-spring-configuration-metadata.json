@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "spring.data.redis.key-prefix",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.data.redis.key-prefix'"
+  },
+  {
+    "name": "spring.data.redis.cluster-on",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.data.redis.cluster-on'"
+  },
+  {
+    "name": "spring.data.redis.command-timeout",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.data.redis.command-timeout'"
+  }
+]}

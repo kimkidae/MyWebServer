@@ -1,0 +1,15 @@
+bootJar {
+	enabled = false
+}
+
+dependencies {
+	implementation platform('software.amazon.awssdk:bom:2.17.280')
+	implementation 'software.amazon.awssdk:dynamodb-enhanced'
+
+	// spring retry
+	implementation 'org.springframework.retry:spring-retry:1.2.5.RELEASE'
+
+	// protostuff
+	implementation 'io.protostuff:protostuff-core:1.7.4'
+	implementation 'io.protostuff:protostuff-runtime:1.7.4'
+}

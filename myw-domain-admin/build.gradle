@@ -1,0 +1,15 @@
+bootJar {
+	enabled = false
+}
+
+dependencies {
+	// jpa
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	// mysql
+	implementation 'com.mysql:mysql-connector-j'
+
+	// h2
+	testImplementation 'com.h2database:h2'
+
+}

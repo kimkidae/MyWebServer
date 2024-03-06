@@ -1,0 +1,15 @@
+spring:
+  config:
+    activate:
+      on-profile:
+        - local
+
+amazon:
+  accesskey: r8i6l
+  secretkey: tvxq5d
+  s3:
+    region: ap-northeast-2
+    bucket: kkd-myweb-local-ap-northeast-2
+  sqs:
+    region: ap-northeast-2
+    queueName: myweb-local-logs
