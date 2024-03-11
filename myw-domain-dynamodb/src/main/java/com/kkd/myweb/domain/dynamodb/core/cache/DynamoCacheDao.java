@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.lang.NonNull;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
@@ -34,6 +35,7 @@ public abstract class DynamoCacheDao<E extends DynamoEntity> {
 		this.serializer = new ProtostuffSerializer<>(clazz);
 	}
 	
+	@NonNull
     protected String getPk(Key key) {
 		return pkPrefix + key.partitionKeyValue().s();
 	}

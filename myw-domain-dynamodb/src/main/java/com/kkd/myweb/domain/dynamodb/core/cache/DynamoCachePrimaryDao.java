@@ -15,7 +15,8 @@ public class DynamoCachePrimaryDao<E extends DynamoEntity> extends DynamoCacheDa
 
 	@Override
     protected void writeCache(Key key, byte[] cacheValue) {
-    	redisService.runAndSet(getPk(key), cacheValue, cacheTtlMinutes, TimeUnit.MINUTES);
+		if(cacheValue == null) throw new IllegalArgumentException();
+		redisService.runAndSet(getPk(key), cacheValue, cacheTtlMinutes, TimeUnit.MINUTES);
 	}
 
 	@Override

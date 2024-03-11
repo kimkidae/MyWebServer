@@ -6,56 +6,48 @@ import java.util.function.Supplier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
-import com.kkd.myweb.domain.redis.config.RedisConfig;
 
 @Service
 public class RedisService {
-	private final String keyPrefix;
-
-	public RedisService(RedisConfig redisConfig) {
-		keyPrefix = redisConfig.getKeyPrefix();
-	}
 
 	@Autowired
 	@Qualifier("byteRedisTemplate") 
 	protected RedisTemplate<String, byte[]> byteRedisTemplate;
 
-	private String getRedisKey(String key) {
-		return keyPrefix + ":"+ key;
+	public void runAndSet(@NonNull String key, @NonNull byte[] value, long timeout, @NonNull TimeUnit timeUnit) {
+		run(() -> byteRedisTemplate.opsForValue().set(key, value, timeout, timeUnit));
 	}
 
-	public void runAndSet(String key, byte[] value, long timeout, TimeUnit timeUnit) {
-    	run(() -> byteRedisTemplate.opsForValue().set(getRedisKey(key), value, timeout, timeUnit));
+	public byte[] runAndGet(@NonNull String key) {
+		return runAndGet(() -> byteRedisTemplate.opsForValue().get(key));
 	}
 
-	public byte[] runAndGet(String key) {
-		return runAndGet(() -> byteRedisTemplate.opsForValue().get(getRedisKey(key)));
+	public void runAndExpire(@NonNull String key, long timeout, @NonNull TimeUnit timeUnit) {
+		run(() -> byteRedisTemplate.expire(key, timeout, timeUnit));
 	}
 
-	public void runAndExpire(String key, long timeout, TimeUnit timeUnit) {
-		run(() -> byteRedisTemplate.expire(getRedisKey(key), timeout, timeUnit));
+	public void runAndDelete(@NonNull String key) {
+		run(() -> byteRedisTemplate.delete(key));
 	}
 
-	public void runAndDelete(String key) {
-		run(() -> byteRedisTemplate.delete(getRedisKey(key)));
+	public void delete(@NonNull String key) {
+		byteRedisTemplate.delete(key);
 	}
 
-	public void delete(String key) {
-		byteRedisTemplate.delete(getRedisKey(key));
+	public void runAndHashPut(@NonNull String key, @NonNull Object hashKey, byte[] value) {
+		if(value == null) throw new IllegalArgumentException();
+		run(() -> byteRedisTemplate.opsForHash().put(key, hashKey, value));
 	}
 
-	public void runAndHashPut(String key, Object hashKey, Object value) {
-		run(() -> byteRedisTemplate.opsForHash().put(getRedisKey(key), hashKey, value));
+	public Object runAndHashGet(@NonNull String key, @NonNull String hashKey) {
+		return runAndGet(() -> byteRedisTemplate.opsForHash().get(key, hashKey));
 	}
 
-	public Object runAndHashGet(String key, String hashKey) {
-		return runAndGet(() -> byteRedisTemplate.opsForHash().get(getRedisKey(key), hashKey));
-	}
-
-	public void runAndHashDelete(String key, String hashKey) {
-		run(() -> byteRedisTemplate.opsForHash().delete(getRedisKey(key), hashKey));
+	public void runAndHashDelete(@NonNull String key, String hashKey) {
+		run(() -> byteRedisTemplate.opsForHash().delete(key, hashKey));
 	}
 
 	public void run(Runnable redisCommand) {

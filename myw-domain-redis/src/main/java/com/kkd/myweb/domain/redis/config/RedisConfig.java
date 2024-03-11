@@ -2,8 +2,9 @@ package com.kkd.myweb.domain.redis.config;
 
 import java.time.Duration;
 import java.util.Collections;
-import java.util.List;
+import java.util.Objects;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +15,7 @@ import org.springframework.data.redis.connection.lettuce.LettuceClientConfigurat
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.lang.NonNull;
 
 import io.lettuce.core.ReadFrom;
 import io.lettuce.core.cluster.ClusterClientOptions;
@@ -38,7 +40,10 @@ public class RedisConfig {
 	@Value("${spring.data.redis.cluster-on:#{false}}")
 	private boolean isCluster;
 
-    @Bean
+	@Autowired
+	@NonNull private PrefixedStringKeySerializer prefixedSpKeySerializer;
+
+	@Bean
     RedisConnectionFactory redisConnectionFactory() {
 		if (isCluster)
 			return clusterFactory();
@@ -47,35 +52,47 @@ public class RedisConfig {
 	}
 
 	private RedisConnectionFactory clusterFactory() {
-		List<String> nodes = Collections.singletonList(redisHost + ":" + redisPort);
-		RedisClusterConfiguration redisClusterConfiguration = new RedisClusterConfiguration(nodes);
-
-		ClusterTopologyRefreshOptions topologyRefreshOptions = ClusterTopologyRefreshOptions.builder()
+		ClusterTopologyRefreshOptions clusterTopologyRefreshOptions = ClusterTopologyRefreshOptions.builder()
 				.closeStaleConnections(true)
 				.enableAllAdaptiveRefreshTriggers()
 				.build();
 
 		ClusterClientOptions clusterClientOptions = ClusterClientOptions.builder()
 				.autoReconnect(true)
-				.topologyRefreshOptions(topologyRefreshOptions)
+				.topologyRefreshOptions(clusterTopologyRefreshOptions)
 				.validateClusterNodeMembership(false)
 				.build();
 
-		LettuceClientConfiguration  lettuceClientConfiguration = LettuceClientConfiguration.builder()
-				.readFrom(ReadFrom.REPLICA_PREFERRED)
-				.commandTimeout(Duration.ofMillis(commandTimeout))
+		var nodes = Collections.singletonList(redisHost + ":" + redisPort);
+		var readForm = ReadFrom.REPLICA_PREFERRED;
+		var timeout = Duration.ofMillis(commandTimeout);
+
+		Objects.requireNonNull(nodes);
+		Objects.requireNonNull(readForm);
+		Objects.requireNonNull(timeout);
+		Objects.requireNonNull(clusterClientOptions);
+
+		LettuceClientConfiguration lettuceClientConfiguration = LettuceClientConfiguration.builder()
+				.readFrom(readForm)
+				.commandTimeout(timeout)
 				.clientOptions(clusterClientOptions)
 				.build();
+
+		RedisClusterConfiguration redisClusterConfiguration = new RedisClusterConfiguration(nodes);
 
 		return new LettuceConnectionFactory(redisClusterConfiguration, lettuceClientConfiguration);
 	}
 
 	private RedisConnectionFactory singleFactory() {
-		LettuceClientConfiguration lettuceClientConfiguration = LettuceClientConfiguration.builder()
-				.commandTimeout(Duration.ofMillis(commandTimeout))
-				.build();
+		var timeout = Duration.ofMillis(commandTimeout);
+		var host = redisHost;
+		if(timeout == null || host == null) throw new IllegalArgumentException();
 
-		RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(redisHost, redisPort);
+		LettuceClientConfiguration lettuceClientConfiguration = LettuceClientConfiguration.builder()
+			.commandTimeout(timeout)
+			.build();
+
+		RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(host, redisPort);
 		return new LettuceConnectionFactory(redisStandaloneConfiguration, lettuceClientConfiguration);
 	}
 
@@ -83,7 +100,7 @@ public class RedisConfig {
     RedisTemplate<String, byte[]> byteRedisTemplate() {
 		RedisTemplate<String, byte[]> template = new RedisTemplate<String, byte[]>();
 		template.setConnectionFactory(redisConnectionFactory());
-		template.setKeySerializer(RedisSerializer.string());
+		template.setKeySerializer(prefixedSpKeySerializer);
 		template.setValueSerializer(RedisSerializer.byteArray());
 		template.setHashKeySerializer(RedisSerializer.string());
 		template.setHashValueSerializer(RedisSerializer.byteArray());

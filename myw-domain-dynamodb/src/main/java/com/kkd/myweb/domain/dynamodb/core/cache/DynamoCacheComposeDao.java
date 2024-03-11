@@ -1,8 +1,10 @@
 package com.kkd.myweb.domain.dynamodb.core.cache;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.springframework.lang.NonNull;
 
 import com.kkd.myweb.domain.dynamodb.core.entities.DynamoComposeEntity;
 
@@ -14,12 +16,11 @@ public class DynamoCacheComposeDao<E extends DynamoComposeEntity<S>, S> extends 
 		super(clazz, pkPrefix);
 	}
 
+	@NonNull
 	private String getSk(Key key) {
-		if(key.sortKeyValue().get().n().isEmpty()) {
-			return key.sortKeyValue().get().s();
-		}else {
-			return key.sortKeyValue().get().n();
-		}
+		String sk = key.sortKeyValue().get().n().isEmpty() ? key.sortKeyValue().get().s() : key.sortKeyValue().get().n();
+		Objects.requireNonNull(sk);
+		return sk;
 	}
 
 	@Override
