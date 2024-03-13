@@ -1,0 +1,15 @@
+spring:
+  config:
+    activate:
+      on-profile:
+        - local
+    import:
+    - classpath:application-module-aws-test.yml
+    - classpath:application-domain-redis-test.yml
+
+amazon:
+  dynamodb:
+    cache-ttl-minutes: 10
+    table-name-prefix: myw-loc-
+    region: localhost
+    endpoint: http://localhost:8000

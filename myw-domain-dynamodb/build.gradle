@@ -7,7 +7,7 @@ dependencies {
 	implementation 'software.amazon.awssdk:dynamodb-enhanced'
 
 	// spring retry
-	implementation 'org.springframework.retry:spring-retry:1.2.5.RELEASE'
+	implementation 'org.springframework.retry:spring-retry'
 
 	// protostuff
 	implementation 'io.protostuff:protostuff-core:1.7.4'

@@ -48,13 +48,14 @@ configure([  project(":myw-domain-admin")
 
 		//spring boot starter
 		implementation 'org.springframework.boot:spring-boot-starter'
-		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	}
 }
 
 project(':myw-domain-dynamodb') {
     dependencies {
         implementation project(':myw-domain-redis')
+        implementation project(':myw-module-aws')
     }
 }
 

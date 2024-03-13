@@ -1,0 +1,21 @@
+spring:
+  config:
+    activate:
+      on-profile:
+        - local
+
+  data:
+    redis:
+      repositories:
+        enabled: false
+      host: 127.0.0.1
+      port: 6379
+      timeout: 3000
+      lettuce:
+        pool:
+          max-active: 3
+          max-idle: 3
+          min-idle: 1
+      key-prefix: myw
+      cluster-on: false
+      command-timeout: 2000

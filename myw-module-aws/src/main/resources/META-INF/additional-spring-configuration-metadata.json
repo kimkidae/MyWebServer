@@ -15,11 +15,6 @@
     "description": "A description for 'amazon.s3.region'"
   },
   {
-    "name": "amazon.sqs.region",
-    "type": "java.lang.String",
-    "description": "A description for 'amazon.sqs.region'"
-  },
-  {
     "name": "amazon.sqs.queue-name",
     "type": "java.lang.String",
     "description": "A description for 'amazon.sqs.queue-name'"
@@ -28,5 +23,10 @@
     "name": "amazon.s3.bucket",
     "type": "java.lang.String",
     "description": "A description for 'amazon.s3.bucket'"
+  },
+  {
+    "name": "amazon.sqs.region",
+    "type": "java.lang.String",
+    "description": "A description for 'amazon.sqs.region'"
   }
 ]}

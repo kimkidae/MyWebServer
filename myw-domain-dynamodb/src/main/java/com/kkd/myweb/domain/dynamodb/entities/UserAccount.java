@@ -11,7 +11,6 @@ import lombok.Setter;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbIgnore;
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSecondaryPartitionKey;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSecondarySortKey;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortKey;
@@ -19,7 +18,6 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortK
 @Setter
 @DynamoDbBean
 public class UserAccount extends UserComposeEntity<String>{
-	@Tag(1) private String uid;
 	@Tag(2) private Platform platform;
 	@Tag(3) private int version; //schema version
 	@Tag(4) private String platformId;
@@ -27,23 +25,7 @@ public class UserAccount extends UserComposeEntity<String>{
 
 	@Tag(6) private LocalDateTime createDt;
 	@Tag(7) private LocalDateTime preLoginDt;
-	@Tag(8) private LocalDateTime logintDt;
-
-	@DynamoDbPartitionKey
-	@Override
-	public String getPk() {
-		return uid;
-	}
-
-	@Override
-	public void setPk(String pk) {
-		uid = pk;
-	}
-
-	@DynamoDbIgnore
-	public Platform getUid() {
-		return platform;
-	}
+	@Tag(8) private LocalDateTime loginDt;
 
 	@Override
 	@DynamoDbSecondarySortKey(indexNames = {DynamoConst.GSI_PLATFORM_ID})
@@ -54,9 +36,9 @@ public class UserAccount extends UserComposeEntity<String>{
 
 	@Override
 	public void setSk(String sk) {
-		Platform.valueOf(sk);
+		platform = Platform.valueOf(sk);
 	}
-
+	
 	@DynamoDbIgnore
 	public Platform getPlatform() {
 		return platform;
@@ -89,8 +71,9 @@ public class UserAccount extends UserComposeEntity<String>{
 	}
 
 	@DynamoDbAttribute(DynamoConst.LOGIN_DT)
-	public LocalDateTime getLogintDt() {
-		return logintDt;
+	public LocalDateTime getLoginDt() {
+		return loginDt;
 	}
+
 
 }
